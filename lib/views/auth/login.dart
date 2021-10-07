@@ -1,13 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:study/components/s_button.dart';
+import 'package:study/components/s_textfield.dart';
 import 'package:study/utils/colors.dart';
+import 'package:study/utils/rules.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final email = TextEditingController();
+  final senha = TextEditingController();
+  final nodeEmail = FocusNode();
+  final nodePass = FocusNode();
+  final _form = GlobalKey<FormState>();
+  login() {
+    var isValid = _form.currentState!.validate();
+    if (!isValid) return;
+    final payload = {email: email.text, senha: senha.text};
+  }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+
     return Scaffold(
       body: Stack(children: [
         Image.asset(
@@ -15,52 +34,62 @@ class Login extends StatelessWidget {
         ),
         SafeArea(
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Card(
-                  color: Colors.transparent,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Image.asset(
-                            'assets/login.png',
-                            width: mediaQuery.size.width * 0.6,
-                          ),
-                          TextField(
-                            decoration: InputDecoration(
-                              label: Text('Email',
-                                  style: TextStyle(
-                                    color: Colors_Theme.blue_Theme[700],
-                                  )),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: Colors.transparent),
-                                borderRadius: new BorderRadius.circular(8),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Card(
+                    color: Colors.transparent,
+                    shadowColor: Colors.white.withOpacity(0.5),
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 35),
+                      child: Form(
+                        key: _form,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Image.asset(
+                                'assets/login.png',
+                                width: mediaQuery.size.width * 0.6,
                               ),
-                              filled: true,
-                              fillColor: Colors_Theme.blue_Theme[50],
-                            ),
-                          )
-                        ]),
-                    height: mediaQuery.size.height * 0.5,
-                    width: mediaQuery.size.width * 0.7,
-                    constraints: BoxConstraints(maxWidth: 320, maxHeight: 420),
+                              s_textfield(
+                                label: 'Email',
+                                editingController: email,
+                                type: 'email',
+                                nextFocusNode: nodePass,
+                                focusNode: nodeEmail,
+                                rules: [Rules.required, Rules.email],
+                              ),
+                              s_textfield(
+                                  label: 'Senha',
+                                  editingController: senha,
+                                  type: 'password',
+                                  focusNode: nodePass,
+                                  submited: login,
+                                  rules: [Rules.required]),
+                            ]),
+                      ),
+                      height: mediaQuery.size.height * 0.55,
+                      width: mediaQuery.size.width * 0.8,
+                      constraints:
+                          BoxConstraints(maxWidth: 350, maxHeight: 440),
+                    ),
                   ),
-                ),
-                s_button(
-                  function: () {},
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Não tem conta?'),
-                    TextButton(onPressed: () {}, child: Text('Crie'))
-                  ],
-                )
-              ],
+                  SizedBox(height: 25),
+                  s_button(
+                    function: login,
+                    label: 'Entrar',
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Não tem conta?'),
+                      TextButton(onPressed: () {}, child: Text('Crie'))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
