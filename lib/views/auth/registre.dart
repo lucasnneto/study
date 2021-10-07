@@ -3,38 +3,41 @@ import 'package:provider/provider.dart';
 import 'package:study/components/s_button.dart';
 import 'package:study/components/s_textfield.dart';
 import 'package:study/providers/auth.dart';
-import 'package:study/utils/App_routes.dart';
+import 'package:study/utils/colors.dart';
 import 'package:study/utils/rules.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class Registre extends StatefulWidget {
+  const Registre({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Registre> createState() => _RegistreState();
 }
 
-class _LoginState extends State<Login> {
+class _RegistreState extends State<Registre> {
   final email = TextEditingController();
   final senha = TextEditingController();
+  final name = TextEditingController();
   final nodeEmail = FocusNode();
   final nodePass = FocusNode();
+  final nodeName = FocusNode();
   final _form = GlobalKey<FormState>();
-  login() async {
+
+  registre() async {
     Auth auth = Provider.of<Auth>(context, listen: false);
     var isValid = _form.currentState!.validate();
     if (!isValid) return;
     final payload = {
       'email': email.text,
       'senha': senha.text,
+      'name': name.text
     };
-    await auth.signin(payload, context);
+    await auth.signup(payload, context);
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     Auth auth = Provider.of<Auth>(context);
-
     return Scaffold(
       body: Stack(children: [
         Image.asset(
@@ -57,9 +60,19 @@ class _LoginState extends State<Login> {
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Image.asset(
-                                'assets/login.png',
-                                width: mediaQuery.size.width * 0.6,
+                              Text(
+                                'Começe a aprender',
+                                style: TextStyle(
+                                  color: Colors_Theme.blue_Theme[700],
+                                  fontSize: 27,
+                                ),
+                              ),
+                              s_textfield(
+                                label: 'Nome',
+                                editingController: name,
+                                nextFocusNode: nodeEmail,
+                                focusNode: nodeName,
+                                rules: [Rules.required],
                               ),
                               s_textfield(
                                 label: 'Email',
@@ -70,12 +83,13 @@ class _LoginState extends State<Login> {
                                 rules: [Rules.required, Rules.email],
                               ),
                               s_textfield(
-                                  label: 'Senha',
-                                  editingController: senha,
-                                  type: 'password',
-                                  focusNode: nodePass,
-                                  submited: login,
-                                  rules: [Rules.required]),
+                                label: 'Senha',
+                                editingController: senha,
+                                type: 'password',
+                                focusNode: nodePass,
+                                submited: registre,
+                                rules: [Rules.required, Rules.min],
+                              ),
                             ]),
                       ),
                       height: mediaQuery.size.height * 0.55,
@@ -93,23 +107,16 @@ class _LoginState extends State<Login> {
                           child: const CircularProgressIndicator(),
                         )
                       : s_button(
-                          function: login,
-                          label: 'Entrar',
+                          function: registre,
+                          label: 'Criar conta',
                         ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Não tem conta?'),
-                      TextButton(
-                          onPressed: auth.status.isLoading
-                              ? null
-                              : () {
-                                  Navigator.of(context)
-                                      .pushNamed(AppRoutes.REGISTRE);
-                                },
-                          child: Text('Crie'))
-                    ],
-                  )
+                  TextButton(
+                      onPressed: auth.status.isLoading
+                          ? null
+                          : () {
+                              Navigator.of(context).pop();
+                            },
+                      child: Text('Voltar'))
                 ],
               ),
             ),
