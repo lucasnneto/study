@@ -6,6 +6,7 @@ import 'package:study/utils/colors.dart';
 import 'package:study/views/auth/login.dart';
 import 'package:study/views/auth/registre.dart';
 import 'package:study/views/home.dart';
+import 'package:study/views/template.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         routes: {
           AppRoutes.AUTH_HOME: (ctx) => Login(),
           AppRoutes.REGISTRE: (ctx) => Registre(),
-          AppRoutes.HOME: (ctx) => Home(),
+          AppRoutes.HOME: (ctx) => Template(),
         },
       ),
     );
