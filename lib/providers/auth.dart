@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:study/data/Store.dart';
 import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/Http.dart';
 import 'package:study/utils/Status.dart';
@@ -9,6 +12,7 @@ class Auth with ChangeNotifier {
   DateTime? _expiryDate;
   String? _userId;
   Status status = Status();
+  Timer? _logoutTimer;
   String? get token {
     if (_token != null &&
         _expiryDate != null &&
@@ -46,6 +50,12 @@ class Auth with ChangeNotifier {
       setState('');
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Conta criada com sucesso!')));
+      await Store.saveMap('userData', {
+        "token": _token,
+        "userId": _userId,
+        "expiryDate": _expiryDate!.toIso8601String()
+      });
+      _autoLogout();
       Navigator.of(context)
         ..pop()
         ..pushReplacementNamed(AppRoutes.HOME);
@@ -70,6 +80,40 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> tryAutoLogin() async {
+    if (isAuth) return Future.value();
+    final userData = await Store.getMap('userData');
+    if (userData == null) return Future.value();
+    final expiryDate = DateTime.parse(userData['expiryDate']);
+    if (expiryDate.isBefore(DateTime.now())) return Future.value();
+    _token = userData['token'];
+    _expiryDate = expiryDate;
+    _userId = userData['userId'];
+    _autoLogout();
+    notifyListeners();
+    return Future.value();
+  }
+
+  void _autoLogout() {
+    if (_logoutTimer != null) {
+      _logoutTimer!.cancel();
+    }
+    final timeToLogout = _expiryDate?.difference(DateTime.now()).inSeconds;
+    _logoutTimer = Timer(Duration(seconds: timeToLogout!), logout);
+  }
+
+  void logout() {
+    _token = null;
+    _userId = null;
+    _expiryDate = null;
+    if (_logoutTimer != null) {
+      _logoutTimer!.cancel();
+      _logoutTimer = null;
+    }
+    Store.remove('userData');
+    notifyListeners();
+  }
+
   Future<void> signin(Map<String, String> payload, BuildContext context) async {
     final dio = Http.signin_dio;
     try {
@@ -84,6 +128,12 @@ class Auth with ChangeNotifier {
           .add(Duration(seconds: int.parse(res.data['expiresIn'])));
       _userId = res.data['localId'];
       setState('');
+      await Store.saveMap('userData', {
+        "token": _token,
+        "userId": _userId,
+        "expiryDate": _expiryDate!.toIso8601String()
+      });
+      _autoLogout();
       Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
       notifyListeners();
     } catch (e) {

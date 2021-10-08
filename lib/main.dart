@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:study/providers/auth.dart';
 import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/colors.dart';
+import 'package:study/views/auth/auth_home.dart';
 import 'package:study/views/auth/login.dart';
 import 'package:study/views/auth/registre.dart';
 import 'package:study/views/home.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         routes: {
-          AppRoutes.AUTH_HOME: (ctx) => Login(),
+          AppRoutes.AUTH_HOME: (ctx) => AuthOrHomeScreen(),
           AppRoutes.REGISTRE: (ctx) => Registre(),
           AppRoutes.HOME: (ctx) => Template(),
         },
