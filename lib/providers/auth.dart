@@ -25,10 +25,11 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signup(Map<String, String> payload, BuildContext context) async {
-    final dio = Http.signup_dio;
+    final signdio = Http.signup_dio;
+    final dio = Http.dio;
     try {
       setState('loading');
-      final res = await dio.post('', data: {
+      final res = await signdio.post('', data: {
         'email': payload['email'],
         'password': payload['senha'],
         'returnSecureToken': true,
@@ -37,6 +38,11 @@ class Auth with ChangeNotifier {
       _expiryDate = DateTime.now()
           .add(Duration(seconds: int.parse(res.data['expiresIn'])));
       _userId = res.data['localId'];
+      await dio.put('user.json', queryParameters: {
+        'auth': _token,
+      }, data: {
+        _userId: payload['name']
+      });
       setState('');
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Conta criada com sucesso!')));

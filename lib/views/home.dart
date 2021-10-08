@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:study/views/template.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Container(child: Text('Foi')));
+    return Template(child: Text('aqui'));
   }
 }

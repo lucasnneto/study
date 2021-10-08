@@ -12,4 +12,9 @@ class Http {
       baseUrl: '${Constants.AUTH_URL}signInWithPassword${Constants.KEY_LOGIN}',
     ),
   );
+  static final dio = Dio(
+    BaseOptions(
+      baseUrl: '${Constants.BASE_API_URL}',
+    ),
+  );
 }
