@@ -38,20 +38,31 @@ class _TemplateState extends State<Template> {
           child: _screens[_selectedScreenIndex],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _selectScreen,
-        unselectedItemColor: Colors_Theme.blue_Theme[50],
-        selectedItemColor: Colors_Theme.blue_Theme[700],
-        currentIndex: _selectedScreenIndex,
-        type: BottomNavigationBarType.shifting,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble_outline), label: "Chat"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.people_alt_outlined), label: "Config"),
-        ],
+      bottomNavigationBar: Container(
+        height: 72,
+        child: Column(
+          children: [
+            Divider(
+              color: Colors_Theme.blue_Theme[700],
+            ),
+            BottomNavigationBar(
+              onTap: _selectScreen,
+              elevation: 0,
+              unselectedItemColor: Colors_Theme.blue_Theme[50],
+              selectedItemColor: Colors_Theme.blue_Theme[700],
+              currentIndex: _selectedScreenIndex,
+              type: BottomNavigationBarType.shifting,
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home_outlined), label: "Home"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.chat_bubble_outline), label: "Chat"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.people_alt_outlined), label: "Config"),
+              ],
+            ),
+          ],
+        ),
       ),
     );
     ;
