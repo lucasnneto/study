@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:study/utils/Constants.dart';
 import 'package:study/utils/colors.dart';
 
-class s_textfield extends StatelessWidget {
+class s_textfield extends StatefulWidget {
   final String label;
   final String type;
   final TextEditingController editingController;
@@ -10,42 +10,70 @@ class s_textfield extends StatelessWidget {
   final Function()? submited;
   final FocusNode? focusNode;
   final List<dynamic>? rules;
-  const s_textfield({
+  final int? maxLines;
+  s_textfield({
     Key? key,
     required this.label,
-    this.type = 'text',
     required this.editingController,
+    this.type = 'text',
     this.nextFocusNode,
     this.focusNode,
     this.submited,
+    this.maxLines = 1,
     this.rules = const [],
   }) : super(key: key);
+
+  @override
+  State<s_textfield> createState() => _s_textfieldState();
+}
+
+class _s_textfieldState extends State<s_textfield> {
   String? validator(String? value) {
-    final rule =
-        this.rules!.firstWhere((el) => el(value) is String, orElse: () => null);
+    final rule = this
+        .widget
+        .rules!
+        .firstWhere((el) => el(value) is String, orElse: () => null);
     if (rule != null) return rule(value);
 
     return null;
   }
 
   @override
+  bool _passwordVisible = false;
+
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: type == 'password',
-      keyboardType: Constants.typeKeyboard[type],
-      controller: editingController,
+      obscureText: widget.type == 'password' && !_passwordVisible,
+      keyboardType: Constants.typeKeyboard[widget.type],
+      maxLines: widget.maxLines,
+      controller: widget.editingController,
       onFieldSubmitted: (_) {
-        if (submited != null)
-          submited!();
+        if (widget.submited != null)
+          widget.submited!();
         else
-          FocusScope.of(context).requestFocus(nextFocusNode);
+          FocusScope.of(context).requestFocus(widget.nextFocusNode);
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,
-      focusNode: focusNode,
+      focusNode: widget.focusNode,
       decoration: InputDecoration(
+        suffixIcon: widget.type == 'password'
+            ? IconButton(
+                icon: Icon(
+                  // Based on passwordVisible state choose the icon
+                  _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: Theme.of(context).primaryColorDark,
+                ),
+                onPressed: () {
+                  // Update the state i.e. toogle the state of passwordVisible variable
+                  setState(() {
+                    _passwordVisible = !_passwordVisible;
+                  });
+                },
+              )
+            : null,
         label: Text(
-          this.label,
+          this.widget.label,
           style: TextStyle(
             color: Colors_Theme.blue_Theme[700],
           ),

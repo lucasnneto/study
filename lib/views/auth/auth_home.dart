@@ -7,7 +7,7 @@ import 'package:study/views/template.dart';
 class AuthOrHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Auth auth = Provider.of(context);
+    Auth auth = Provider.of<Auth>(context);
 
     return FutureBuilder(
       future: auth.tryAutoLogin(),

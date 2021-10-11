@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study/providers/auth.dart';
+import 'package:study/providers/doubt.dart';
 import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/colors.dart';
 import 'package:study/views/auth/auth_home.dart';
-import 'package:study/views/auth/login.dart';
 import 'package:study/views/auth/registre.dart';
-import 'package:study/views/home.dart';
+import 'package:study/views/doubt/new_doubt.dart';
 import 'package:study/views/template.dart';
 
 void main() {
@@ -24,6 +24,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => new Auth(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => new Doubts(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -39,6 +42,7 @@ class MyApp extends StatelessWidget {
           AppRoutes.AUTH_HOME: (ctx) => AuthOrHomeScreen(),
           AppRoutes.REGISTRE: (ctx) => Registre(),
           AppRoutes.HOME: (ctx) => Template(),
+          AppRoutes.NEW_DOUBT: (ctx) => newDoubt(),
         },
       ),
     );

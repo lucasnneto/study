@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:study/utils/colors.dart';
-import 'package:study/views/doubt.dart';
+import 'package:study/views/doubt/index.dart';
 import 'package:study/views/home.dart';
 import 'package:study/views/user.dart';
 
@@ -14,7 +14,7 @@ class Template extends StatefulWidget {
 }
 
 class _TemplateState extends State<Template> {
-  int _selectedScreenIndex = 0;
+  int _selectedScreenIndex = 1;
   final List<Widget> _screens = [
     Home(),
     Doubt(),
@@ -50,8 +50,9 @@ class _TemplateState extends State<Template> {
               elevation: 0,
               unselectedItemColor: Colors_Theme.blue_Theme[50],
               selectedItemColor: Colors_Theme.blue_Theme[700],
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
               currentIndex: _selectedScreenIndex,
-              type: BottomNavigationBarType.shifting,
               items: [
                 BottomNavigationBarItem(
                     icon: Icon(Icons.home_outlined), label: "Home"),

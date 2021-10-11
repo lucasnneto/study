@@ -9,6 +9,7 @@ class Constants {
     'text': TextInputType.text,
     'password': TextInputType.text,
     'number': TextInputType.number,
-    'email': TextInputType.emailAddress
+    'email': TextInputType.emailAddress,
+    'multi': TextInputType.multiline
   };
 }

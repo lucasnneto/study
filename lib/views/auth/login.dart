@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   SizedBox(height: 25),
-                  auth.status.isLoading
+                  auth.status == 'loading'
                       ? Container(
                           width: 50,
                           height: 50,
@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
                     children: [
                       Text('Não tem conta?'),
                       TextButton(
-                          onPressed: auth.status.isLoading
+                          onPressed: auth.status == 'loading'
                               ? null
                               : () {
                                   Navigator.of(context)

@@ -99,7 +99,7 @@ class _RegistreState extends State<Registre> {
                     ),
                   ),
                   SizedBox(height: 25),
-                  auth.status.isLoading
+                  auth.status == 'loading'
                       ? Container(
                           width: 50,
                           height: 50,
@@ -111,7 +111,7 @@ class _RegistreState extends State<Registre> {
                           label: 'Criar conta',
                         ),
                   TextButton(
-                      onPressed: auth.status.isLoading
+                      onPressed: auth.status == 'loading'
                           ? null
                           : () {
                               Navigator.of(context).pop();
