@@ -20,6 +20,9 @@ class _LoginState extends State<Login> {
   final nodePass = FocusNode();
   final _form = GlobalKey<FormState>();
   login() async {
+    setState(() {
+      load = true;
+    });
     Auth auth = Provider.of<Auth>(context, listen: false);
     var isValid = _form.currentState!.validate();
     if (!isValid) return;
@@ -28,8 +31,12 @@ class _LoginState extends State<Login> {
       'senha': senha.text,
     };
     await auth.signin(payload, context);
+    setState(() {
+      load = false;
+    });
   }
 
+  bool load = false;
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -85,7 +92,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   SizedBox(height: 25),
-                  auth.status == 'loading'
+                  load
                       ? Container(
                           width: 50,
                           height: 50,
@@ -101,7 +108,7 @@ class _LoginState extends State<Login> {
                     children: [
                       Text('Não tem conta?'),
                       TextButton(
-                          onPressed: auth.status == 'loading'
+                          onPressed: !load
                               ? null
                               : () {
                                   Navigator.of(context)

@@ -125,7 +125,6 @@ class Auth with ChangeNotifier {
     final diosign = Http.signin_dio;
     final dio = Http.dio;
     try {
-      setState('loading');
       final res = await diosign.post('', data: {
         'email': payload['email'],
         'password': payload['senha'],
@@ -147,7 +146,6 @@ class Auth with ChangeNotifier {
         "progress": _progress
       });
       _autoLogout();
-      setState('');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Ocorreu um erro ao entrar na conta!')));
