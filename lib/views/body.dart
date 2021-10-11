@@ -6,16 +6,6 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 12,
-            horizontal: 8,
-          ),
-          child: child,
-        ),
-      ),
-    );
+    return child;
   }
 }
