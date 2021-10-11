@@ -12,6 +12,7 @@ class s_textfield extends StatefulWidget {
   final List<dynamic>? rules;
   final Function()? onTap;
   final int? maxLines;
+  final bool readOnly;
   s_textfield({
     Key? key,
     required this.label,
@@ -23,6 +24,7 @@ class s_textfield extends StatefulWidget {
     this.maxLines = 1,
     this.rules = const [],
     this.onTap,
+    this.readOnly = false,
   }) : super(key: key);
 
   @override
@@ -45,6 +47,7 @@ class _s_textfieldState extends State<s_textfield> {
 
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: widget.readOnly,
       onTap: widget.onTap,
       obscureText: widget.type == 'password' && !_passwordVisible,
       keyboardType: Constants.typeKeyboard[widget.type],

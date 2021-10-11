@@ -157,4 +157,18 @@ class Auth with ChangeNotifier {
     notifyListeners();
     return Future.value();
   }
+
+  Future<void> removeStatus(String id, BuildContext context) async {
+    final dio = Http.dio;
+    try {
+      await dio.delete('/user/$id/status.json');
+      _progress = [];
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Deletado com sucesso!')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ocorreu um erro ao apagar os dados!')));
+    }
+    return Future.value();
+  }
 }
