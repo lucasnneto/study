@@ -22,7 +22,7 @@ class Doubt {
   final String userId;
   final String userName;
   final String title;
-  final String status;
+  String status;
   final List<Chat> chat;
   final DateTime date;
   Doubt({
@@ -87,6 +87,27 @@ class Doubts with ChangeNotifier {
     status = type;
 
     notifyListeners();
+  }
+
+  Future<void> changeStatus(
+      Map<String, String?> payload, BuildContext ctx) async {
+    final dio = Http.dio;
+    final id = payload['doubtId'];
+    final index = _items.indexWhere((el) => el.id == id);
+    if (index != -1) {
+      try {
+        final res = await dio.patch(
+          '/doubt/$id/.json',
+          data: {"status": payload['value']},
+        );
+        print(res.data);
+        _items[index].status = payload['value']!;
+        Navigator.of(ctx).pop();
+      } catch (e) {
+        setState('error');
+      }
+    }
+    return Future.value();
   }
 
   Future<void> addDoubt(Map<String, String?> payload, BuildContext ctx) async {
@@ -188,6 +209,7 @@ class Doubts with ChangeNotifier {
             ));
         setState('');
         notifyListeners();
+        Navigator.of(ctx).pop();
       } catch (e) {
         setState('error');
       }

@@ -18,7 +18,7 @@ class Template extends StatefulWidget {
 }
 
 class _TemplateState extends State<Template> {
-  int _selectedScreenIndex = 1;
+  int _selectedScreenIndex = 0;
   final List<TabNavigator> _screens = [
     TabNavigator(
       navigatorKey: GlobalKey<NavigatorState>(),

@@ -7,11 +7,20 @@ import 'package:study/views/body.dart';
 import 'package:study/components/s_textfield.dart';
 import 'package:study/widget/tab_navigator.dart';
 
-class Chat extends StatelessWidget {
+class Chat extends StatefulWidget {
   Chat({Key? key}) : super(key: key);
+
+  @override
+  State<Chat> createState() => _ChatState();
+}
+
+class _ChatState extends State<Chat> {
   ScrollController _scrollController = ScrollController();
+
   TextEditingController msg = TextEditingController();
+
   bool _needScroll = true;
+
   _scrollToEnd() async {
     if (_needScroll) {
       _needScroll = false;
@@ -19,6 +28,8 @@ class Chat extends StatelessWidget {
     }
   }
 
+  bool load = false;
+  bool load2 = false;
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) => _scrollToEnd());
@@ -29,6 +40,7 @@ class Chat extends StatelessWidget {
     final userId = Provider.of<Auth>(context, listen: false).userId;
     final userName = Provider.of<Auth>(context, listen: false).userName;
     final mediaQuery = MediaQuery.of(context);
+
     send() async {
       if (msg.text.isEmpty) return;
       final payload = {
@@ -39,6 +51,63 @@ class Chat extends StatelessWidget {
       };
       await doubts.addChat(payload, context);
       msg.clear();
+    }
+
+    void _showDialog() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // retorna um objeto do tipo Dialog
+          final status = doubt.status;
+          final value = status == 'open' ? 'finalizado' : 'aberto';
+          return StatefulBuilder(builder: (context, setS) {
+            return AlertDialog(
+              title: Text("Alterar Status do problema"),
+              content: Text(
+                "Alterar problema para $value",
+                style: TextStyle(
+                  color: status == 'open'
+                      ? Colors_Theme.success
+                      : Colors_Theme.warning,
+                ),
+              ),
+              actions: [
+                // define os botões na base do dialogo
+                TextButton(
+                  child: Text("Fechar"),
+                  style: TextButton.styleFrom(primary: Colors_Theme.error),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: load2
+                      ? Container(
+                          width: 20,
+                          height: 20,
+                          padding: const EdgeInsets.all(2.0),
+                          child: const CircularProgressIndicator(),
+                        )
+                      : Text("Salvar"),
+                  onPressed: () async {
+                    final payload = {
+                      "value": status == 'open' ? 'finish' : 'open',
+                      "doubtId": doubt.id,
+                    };
+                    setS(() {
+                      load2 = true;
+                    });
+                    await doubts.changeStatus(payload, context);
+                    setS(() {
+                      load2 = false;
+                    });
+                  },
+                ),
+              ],
+            );
+          });
+        },
+      );
     }
 
     return Body(
@@ -69,23 +138,58 @@ class Chat extends StatelessWidget {
                       fontSize: 27,
                     ),
                   ),
-                  doubt.status == 'open'
-                      ? Icon(
-                          Icons.help_outline_outlined,
-                          color: Colors_Theme.warning,
+                  load
+                      ? Container(
+                          width: 30,
+                          height: 30,
+                          padding: const EdgeInsets.all(2.0),
+                          child: const CircularProgressIndicator(),
                         )
-                      : Icon(
-                          Icons.check_circle_outline_outlined,
-                          color: Colors_Theme.success,
-                        ),
+                      : FloatingActionButton(
+                          mini: true,
+                          elevation: 1,
+                          // backgroundColor: Colors.transparent,
+                          shape: CircleBorder(),
+                          onPressed: () async {
+                            setState(() {
+                              load = true;
+                            });
+                            await Provider.of<Doubts>(context, listen: false)
+                                .loadDoubts();
+                            setState(() {
+                              load = false;
+                            });
+                          },
+                          child: Icon(Icons.refresh_outlined),
+                        )
                 ],
               ),
               SizedBox(height: 20),
-              Text(
-                doubt.title,
-                style: TextStyle(
-                  fontSize: 20,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    doubt.title,
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  doubt.status == 'open'
+                      ? GestureDetector(
+                          onTap: doubt.userId == userId ? _showDialog : null,
+                          child: Icon(
+                            Icons.help_outline_outlined,
+                            color: Colors_Theme.warning,
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: doubt.userId == userId ? _showDialog : null,
+                          child: Icon(
+                            Icons.check_circle_outline_outlined,
+                            color: Colors_Theme.success,
+                          ),
+                        ),
+                ],
               ),
               SizedBox(height: 20),
               Container(
