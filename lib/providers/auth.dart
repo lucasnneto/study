@@ -48,10 +48,11 @@ class Auth with ChangeNotifier {
       _expiryDate = DateTime.now()
           .add(Duration(seconds: int.parse(res.data['expiresIn'])));
       _userId = res.data['localId'];
-      await dio.put('user.json', queryParameters: {
+      await dio.put('user/$_userId.json', queryParameters: {
         'auth': _token,
       }, data: {
-        _userId: {'name': payload['name'], 'progress': []}
+        'name': payload['name'],
+        'progress': []
       });
       _name = payload['name'];
       _progress = [];

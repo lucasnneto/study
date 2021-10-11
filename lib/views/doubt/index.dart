@@ -55,7 +55,7 @@ class Doubt extends StatelessWidget {
                                     TabNavigator.of(context).push(
                                       context,
                                       Routes_Doubt.DETAIL,
-                                      arguments: doubts.items[i],
+                                      arguments: i,
                                     );
                                   },
                                   title: Text(doubts.items[i].title),

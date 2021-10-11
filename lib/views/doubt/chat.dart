@@ -15,8 +15,7 @@ class Chat extends StatelessWidget {
   _scrollToEnd() async {
     if (_needScroll) {
       _needScroll = false;
-      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 400), curve: Curves.ease);
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     }
   }
 
@@ -24,13 +23,14 @@ class Chat extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) => _scrollToEnd());
 
-    final doubt = ModalRoute.of(context)!.settings.arguments as Doubt;
+    final index = ModalRoute.of(context)!.settings.arguments as int;
     final doubts = Provider.of<Doubts>(context);
+    final doubt = doubts.items[index];
     final userId = Provider.of<Auth>(context, listen: false).userId;
     final userName = Provider.of<Auth>(context, listen: false).userName;
-    final chat = doubt.chat;
     final mediaQuery = MediaQuery.of(context);
     send() async {
+      if (msg.text.isEmpty) return;
       final payload = {
         "text": msg.text,
         "userId": userId,
@@ -94,7 +94,7 @@ class Chat extends StatelessWidget {
                   controller: _scrollController,
                   child: Column(
                     children: [
-                      ...chat
+                      ...doubt.chat
                           .map((e) => Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: Container(
@@ -157,6 +157,11 @@ class Chat extends StatelessWidget {
                 Container(
                     width: mediaQuery.size.width - 100,
                     child: s_textfield(
+                      onTap: () {
+                        _needScroll = true;
+                        _scrollToEnd();
+                      },
+                      submited: send,
                       label: "Mensagem",
                       editingController: msg,
                     )),
