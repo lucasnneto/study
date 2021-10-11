@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h2>Tópico</h2>
+      <input type="text" v-model="name" placeholder="Nome do tópico" />
+      <br />
+      <button @click="sendTopic">Enviar Topico</button>
+      <input type="text" v-model="id" placeholder="ID" />
+      <hr />
+      <h3>Tema</h3>
+
+      <div>
+        <textarea
+          cols="30"
+          rows="10"
+          v-model="lesson.text"
+          placeholder="Texto do topico"
+        ></textarea>
+        <br />
+        <input type="text" v-model="lesson.video" placeholder="URL de video" />
+        <br />
+        <button @click="newURL">Nova URL</button>
+        <div v-for="(u,index) in lesson.url" :key="index">
+          <input
+            type="text"
+            v-model="lesson.url[index]"
+            :placeholder="`URL de apoio ${index+1}`"
+          />
+        </div>
+      </div>
+      <button @click="sendTem">Enviar tema</button>
+      <hr />
+      <h3>Exercicio</h3>
+
+      <br />
+      <select v-model="exercise.type">
+        <option disabled value="">Tipo de exrcicio</option>
+        <option value="mark">Marcar</option>
+        <option value="complete">Completar</option>
+      </select>
+      <input type="text" v-model="exercise.text" placeholder="Pergunta" />
+      <div>
+        <button @click="newOpt">Nova opção</button>
+        <div v-for="(u,index) in exercise.options" :key="index">
+          <input
+            type="text"
+            v-model="exercise.options[index]"
+            :placeholder="`Opção ${index+1}`"
+          />
+        </div>
+      </div>
+      <br />
+      <button @click="sendRes">Enviar resposta</button>
+    </div>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          name: "",
+          id: "",
+          lesson: {
+            text: "",
+            video: "",
+            url: [""],
+          },
+          exercise: {
+            type: "",
+            text: "",
+            options: [""],
+          },
+        },
+        watch: {
+          ["exercise.type"](newValue) {
+            this.exercise.options = [""];
+          },
+        },
+        methods: {
+          newURL() {
+            this.lesson.url.push("");
+          },
+          newOpt() {
+            this.exercise.options.push("");
+          },
+          newRes() {
+            this.exercise.answer.push("");
+          },
+          sendTem() {
+            axios
+              .post(
+                "https://meu-tcc-cfd93-default-rtdb.firebaseio.com/language/java/topic/" +
+                  this.id +
+                  "/lesson.json",
+                {
+                  ...this.lesson,
+                }
+              )
+              .then((res) => {
+                console.log(res.data.name);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          },
+          sendRes() {
+            axios
+              .post(
+                "https://meu-tcc-cfd93-default-rtdb.firebaseio.com/language/java/topic/" +
+                  this.id +
+                  "/exercise.json",
+                {
+                  ...this.exercise,
+                }
+              )
+              .then((res) => {
+                console.log(res.data.name);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          },
+          sendTopic() {
+            axios
+              .post(
+                "https://meu-tcc-cfd93-default-rtdb.firebaseio.com/language/java/topic.json",
+                {
+                  name: this.name,
+                  lesson: [],
+                  exercise: [],
+                }
+              )
+              .then((res) => {
+                this.id = res.data.name;
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
