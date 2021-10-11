@@ -7,6 +7,7 @@ import 'package:study/utils/Rules.dart';
 import 'package:study/utils/colors.dart';
 import 'package:study/views/body.dart';
 import 'package:study/components/s_textfield.dart';
+import 'package:study/widget/tab_navigator.dart';
 
 class newDoubt extends StatefulWidget {
   newDoubt({Key? key}) : super(key: key);
@@ -52,7 +53,7 @@ class _newDoubtState extends State<newDoubt> {
                   // backgroundColor: Colors.transparent,
                   shape: CircleBorder(),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    TabNavigator.of(context).pop(context);
                   },
                   child: Icon(Icons.chevron_left),
                 ),

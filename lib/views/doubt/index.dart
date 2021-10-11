@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:study/providers/doubt.dart';
 import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/colors.dart';
+import 'package:study/widget/tab_navigator.dart';
 
 class Doubt extends StatelessWidget {
   const Doubt({Key? key}) : super(key: key);
@@ -26,14 +27,14 @@ class Doubt extends StatelessWidget {
             FloatingActionButton(
               mini: true,
               onPressed: () {
-                Navigator.of(context).pushNamed(AppRoutes.NEW_DOUBT);
+                TabNavigator.of(context).push(context, Routes_Doubt.NEW);
               },
               child: Icon(Icons.add),
             )
           ],
         ),
         Container(
-          height: mediaQuery.size.height - 72 - 80,
+          height: mediaQuery.size.height - 72 - 96,
           child: FutureBuilder(
               future: Provider.of<Doubts>(context, listen: false).loadDoubts(),
               builder: (ctx, snapshot) {
@@ -50,6 +51,13 @@ class Doubt extends StatelessWidget {
                             itemBuilder: (ctx, i) => Column(
                               children: [
                                 ListTile(
+                                  onTap: () {
+                                    TabNavigator.of(context).push(
+                                      context,
+                                      Routes_Doubt.DETAIL,
+                                      arguments: doubts.items[i],
+                                    );
+                                  },
                                   title: Text(doubts.items[i].title),
                                   subtitle: Text(doubts.items[i].userName),
                                   trailing: Column(
@@ -64,12 +72,13 @@ class Doubt extends StatelessWidget {
                                                   .check_circle_outline_outlined,
                                               color: Colors_Theme.success,
                                             ),
+                                      SizedBox(height: 5),
                                       Text(
                                           '${doubts.items[i].date.day}/${doubts.items[i].date.month}'),
                                     ],
                                   ),
                                 ),
-                                doubts.itemsCount < (i + 1) //FIX
+                                doubts.itemsCount > (i + 1)
                                     ? Divider(
                                         color: Colors_Theme.blue_Theme[700],
                                       )

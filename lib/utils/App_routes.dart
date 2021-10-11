@@ -4,3 +4,17 @@ class AppRoutes {
   static const HOME = '/home';
   static const NEW_DOUBT = '/newdoubt';
 }
+
+class Routes_Doubt {
+  static const HOME = '/';
+  static const NEW = '/new';
+  static const DETAIL = '/detail';
+}
+
+class Routes_Main {
+  static const HOME = '/';
+}
+
+class Routes_User {
+  static const HOME = '/';
+}
