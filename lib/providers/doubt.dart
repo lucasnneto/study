@@ -146,4 +146,52 @@ class Doubts with ChangeNotifier {
     }
     return Future.value();
   }
+
+  Future<void> addChat(Map<String, String?> payload, BuildContext ctx) async {
+    setState('loading');
+    final dio = Http.dio;
+    final date = DateTime.now();
+    final uuid = Uuid().v4();
+    final idDoubt = payload['doubtId'];
+    final index = _items.indexWhere((el) => el.id == payload['doubtId']);
+    if (index != -1) {
+      final chats = _items[index]
+          .chat
+          .map((e) => {
+                "id": e.id,
+                "userId": e.userId,
+                "userName": e.userName,
+                "text": e.text,
+                "date": e.date.toIso8601String(),
+              })
+          .toList();
+      Map<String, String> chat = {
+        "id": uuid,
+        "userId": payload['userId']!,
+        "userName": payload['userName']!,
+        "text": payload['text']!,
+        "date": date.toIso8601String(),
+      };
+      chats.add(chat);
+
+      try {
+        final res = await dio.put(
+          '/doubt/$idDoubt/chat.json',
+          data: chats,
+        );
+        _items[index].chat.add(Chat(
+              id: chat['id']!,
+              userId: chat['userId']!,
+              userName: chat['userName']!,
+              text: chat['text']!,
+              date: DateTime.parse(chat['date']!),
+            ));
+        setState('');
+        notifyListeners();
+      } catch (e) {
+        setState('error');
+      }
+    }
+    return Future.value();
+  }
 }

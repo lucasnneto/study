@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study/components/s_button.dart';
@@ -11,16 +13,148 @@ import 'package:study/widget/tab_navigator.dart';
 
 class Chat extends StatelessWidget {
   Chat({Key? key}) : super(key: key);
+  TextEditingController msg = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final doubt = ModalRoute.of(context)!.settings.arguments as Doubt;
+    final doubts = Provider.of<Doubts>(context);
+    final userId = Provider.of<Auth>(context, listen: false).userId;
+    final userName = Provider.of<Auth>(context, listen: false).userName;
+    final chat = doubt.chat;
+    final mediaQuery = MediaQuery.of(context);
+    final keyboardHeight = mediaQuery.viewInsets.bottom;
+    send() async {
+      final payload = {
+        "text": msg.text,
+        "userId": userId,
+        "userName": userName,
+        "doubtId": doubt.id,
+      };
+      await doubts.addChat(payload, context);
+    }
 
     return Body(
         child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(doubt.title),
-        ...doubt.chat.map((e) => Text(e.text)).toList(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FloatingActionButton(
+                  mini: true,
+                  elevation: 1,
+                  // backgroundColor: Colors.transparent,
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    TabNavigator.of(context).pop(context);
+                  },
+                  child: Icon(Icons.chevron_left),
+                ),
+                Text(
+                  doubt.userName,
+                  style: TextStyle(
+                    color: Colors_Theme.blue_Theme[700],
+                    fontSize: 27,
+                  ),
+                ),
+                doubt.status == 'open'
+                    ? Icon(
+                        Icons.help_outline_outlined,
+                        color: Colors_Theme.warning,
+                      )
+                    : Icon(
+                        Icons.check_circle_outline_outlined,
+                        color: Colors_Theme.success,
+                      ),
+              ],
+            ),
+            SizedBox(height: 30),
+            Text(
+              doubt.title,
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            SizedBox(height: 30),
+            ...chat
+                .map((e) => Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Container(
+                        alignment: e.userId == userId
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft:
+                                  Radius.circular(e.userId == userId ? 10 : 0),
+                              bottomRight:
+                                  Radius.circular(e.userId == userId ? 0 : 10),
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                            color: Colors_Theme
+                                .blue_Theme[e.userId == userId ? 200 : 300],
+                          ),
+                          width: mediaQuery.size.width * 0.5,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              e.userId != userId
+                                  ? Text(
+                                      e.userName,
+                                      style: TextStyle(fontSize: 10),
+                                    )
+                                  : SizedBox(),
+                              SizedBox(height: e.userId != userId ? 10 : 0),
+                              Text(
+                                e.text,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ))
+                .toList(),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                width: mediaQuery.size.width - 100,
+                child: s_textfield(
+                  label: "Mensagem",
+                  editingController: msg,
+                )),
+            doubts.status != 'loading'
+                ? FloatingActionButton(
+                    // backgroundColor: Colors.transparent,
+                    shape: CircleBorder(),
+                    elevation: 1,
+                    onPressed: send,
+                    child: Icon(
+                      Icons.send,
+                      size: 30,
+                    ),
+                  )
+                : Container(
+                    width: 35,
+                    height: 35,
+                    padding: const EdgeInsets.all(2.0),
+                    child: const CircularProgressIndicator(),
+                  ),
+          ],
+        )
       ],
     ));
   }
