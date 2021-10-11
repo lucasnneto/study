@@ -96,7 +96,7 @@
           sendTem() {
             axios
               .post(
-                "https://meu-tcc-cfd93-default-rtdb.firebaseio.com/language/java/topic/" +
+                "https://meu-tcc-cfd93-default-rtdb.firebaseio.com/language/java/" +
                   this.id +
                   "/lesson.json",
                 {
@@ -113,7 +113,7 @@
           sendRes() {
             axios
               .post(
-                "https://meu-tcc-cfd93-default-rtdb.firebaseio.com/language/java/topic/" +
+                "https://meu-tcc-cfd93-default-rtdb.firebaseio.com/language/java/" +
                   this.id +
                   "/exercise.json",
                 {
@@ -130,7 +130,7 @@
           sendTopic() {
             axios
               .post(
-                "https://meu-tcc-cfd93-default-rtdb.firebaseio.com/language/java/topic.json",
+                "https://meu-tcc-cfd93-default-rtdb.firebaseio.com/language/java.json",
                 {
                   name: this.name,
                   lesson: [],
