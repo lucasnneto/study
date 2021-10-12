@@ -12,71 +12,67 @@ class s_Tab {
   });
 }
 
-class s_tabs extends StatefulWidget {
+class s_tabs extends StatelessWidget {
   final List<s_Tab> tabs;
   final Function(dynamic value) update;
+  final dynamic selectedValue;
 
-  const s_tabs({Key? key, required this.tabs, required this.update})
+  const s_tabs(
+      {Key? key,
+      required this.tabs,
+      required this.update,
+      required this.selectedValue})
       : super(key: key);
 
   @override
-  State<s_tabs> createState() => _s_tabsState();
-}
-
-class _s_tabsState extends State<s_tabs> {
-  @override
   Widget build(BuildContext context) {
-    dynamic selectedValue = widget.tabs[0].value;
-    widget.update(selectedValue);
-    return StatefulBuilder(builder: (context, setS) {
-      return LayoutBuilder(builder: (context, contraints) {
-        return Container(
-          constraints: BoxConstraints(maxHeight: 200),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ...widget.tabs
-                  .map(
-                    (e) => GestureDetector(
-                      onTap: () {
-                        setS(() {
-                          widget.update(e.value);
-                          selectedValue = e.value;
-                        });
-                      },
-                      child: Container(
-                        width: contraints.maxWidth * (1 / widget.tabs.length),
-                        child: Column(
-                          children: [
-                            Text(
-                              e.text,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: selectedValue == e.value
-                                    ? Colors_Theme.blue_Theme[500]
-                                    : Colors_Theme.blue_Theme[200],
-                              ),
+    // update(selectedValue);
+
+    return LayoutBuilder(builder: (ctx, contraints) {
+      return Container(
+        constraints: BoxConstraints(maxHeight: 40),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ...tabs
+                .map(
+                  (e) => GestureDetector(
+                    onTap: () {
+                      update(e.value);
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      width: contraints.maxWidth * (1 / tabs.length),
+                      child: Column(
+                        children: [
+                          Text(
+                            e.text,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: selectedValue == e.value
+                                  ? Colors_Theme.blue_Theme[500]
+                                  : Colors_Theme.blue_Theme[200],
                             ),
-                            selectedValue == e.value
-                                ? Container(
-                                    width: contraints.maxWidth *
-                                        (1 / widget.tabs.length),
-                                    child: Divider(
-                                      color: Colors_Theme.blue_Theme[500],
-                                    ),
-                                  )
-                                : SizedBox()
-                          ],
-                        ),
+                          ),
+                          selectedValue == e.value
+                              ? Container(
+                                  width:
+                                      contraints.maxWidth * (1 / tabs.length),
+                                  child: Divider(
+                                    color: Colors_Theme.blue_Theme[500],
+                                  ),
+                                )
+                              : SizedBox()
+                        ],
                       ),
                     ),
-                  )
-                  .toList()
-            ],
-          ),
-        );
-      });
+                  ),
+                )
+                .toList()
+          ],
+        ),
+      );
     });
   }
 }

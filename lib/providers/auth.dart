@@ -55,12 +55,22 @@ class Auth with ChangeNotifier {
     return isAuth ? _name : null;
   }
 
+  String? get language {
+    return isAuth ? _language : null;
+  }
+
   List? get progress {
     return isAuth ? _progress : null;
   }
 
   int get lengthProgress {
     return isAuth && _progress != null ? _progress!.length : 0;
+  }
+
+  List<Progress> get Lessons {
+    return isAuth && _progress != null
+        ? _progress!.where((e) => e.type == 'lesson').toList()
+        : [];
   }
 
   bool get isAuth {

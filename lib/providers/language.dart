@@ -7,12 +7,14 @@ class Lesson {
   final String title;
   final String video;
   final List<dynamic> url;
+  double? status;
   Lesson({
     required this.id,
     required this.text,
     required this.title,
     required this.video,
     required this.url,
+    this.status = 0,
   });
 
   static Lesson toClass(Map<String, dynamic?> map) {
@@ -31,12 +33,14 @@ class Exercise {
   final String type;
   final String text;
   final List<dynamic> options;
+  double? status;
   Exercise({
     required this.id,
     required this.type,
     required this.lessionId,
     required this.text,
     required this.options,
+    this.status = 0,
   });
   static Exercise toClass(Map<String, dynamic?> map) {
     return Exercise(
