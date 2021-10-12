@@ -4,7 +4,9 @@ import 'package:study/components/s_bar.dart';
 import 'package:study/components/s_button.dart';
 import 'package:study/providers/auth.dart';
 import 'package:study/providers/language.dart';
+import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/colors.dart';
+import 'package:study/widget/tab_navigator.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -80,7 +82,14 @@ class Home extends StatelessWidget {
             'assets/study.png',
             width: constraints.maxWidth * 0.6,
           ),
-          s_button(function: () {}, label: "Volte a estudar")
+          s_button(
+              function: () {
+                TabNavigator.of(context).push(
+                  context,
+                  Routes_Main.BODY,
+                );
+              },
+              label: "Volte a estudar")
         ],
       );
     });

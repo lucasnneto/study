@@ -13,6 +13,7 @@ class Routes_Doubt {
 
 class Routes_Main {
   static const HOME = '/';
+  static const BODY = '/body';
 }
 
 class Routes_User {

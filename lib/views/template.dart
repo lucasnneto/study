@@ -4,6 +4,7 @@ import 'package:study/utils/colors.dart';
 import 'package:study/views/doubt/index.dart';
 import 'package:study/views/doubt/new_doubt.dart';
 import 'package:study/views/doubt/chat.dart';
+import 'package:study/views/home/body.dart';
 import 'package:study/views/home/index.dart';
 import 'package:study/views/user.dart';
 import 'package:study/widget/tab_navigator.dart';
@@ -24,6 +25,7 @@ class _TemplateState extends State<Template> {
       navigatorKey: GlobalKey<NavigatorState>(),
       routeBuilders: {
         Routes_Main.HOME: (context) => Home(),
+        Routes_Main.BODY: (context) => Body(),
       },
       initial: Routes_Main.HOME,
     ),
