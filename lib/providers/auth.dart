@@ -73,6 +73,12 @@ class Auth with ChangeNotifier {
         : [];
   }
 
+  List<Progress> get Exercise {
+    return isAuth && _progress != null
+        ? _progress!.where((e) => e.type == 'exercise').toList()
+        : [];
+  }
+
   bool get isAuth {
     return token != null;
   }

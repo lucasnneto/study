@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:study/components/s_tabs.dart';
 import 'package:study/providers/auth.dart';
 import 'package:study/utils/colors.dart';
+import 'package:study/views/home/exercise.dart';
 import 'package:study/views/home/lesson.dart';
 import 'package:study/widget/tab_navigator.dart';
 
@@ -20,7 +21,7 @@ class Body extends StatelessWidget {
 
     List<Widget> screen = [
       LessonList(),
-      Text('atividade'),
+      ExerciseList(),
     ];
     int tab = 0;
 

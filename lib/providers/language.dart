@@ -31,6 +31,7 @@ class Exercise {
   final String id;
   final String lessionId;
   final String type;
+  final String theme;
   final String text;
   final List<dynamic> options;
   double? status;
@@ -39,6 +40,7 @@ class Exercise {
     required this.type,
     required this.lessionId,
     required this.text,
+    required this.theme,
     required this.options,
     this.status = 0,
   });
@@ -47,6 +49,7 @@ class Exercise {
         id: map['id'],
         text: map['text'],
         type: map['type'],
+        theme: map['theme'],
         options: map['options'],
         lessionId: map['lessionId']);
   }

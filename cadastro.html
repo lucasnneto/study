@@ -50,6 +50,7 @@
         <option value="mark">Marcar</option>
         <option value="complete">Completar</option>
       </select>
+      <input type="text" v-model="exercise.theme" placeholder="Titulo" />
       <input type="text" v-model="exercise.text" placeholder="Pergunta" />
       <div>
         <button @click="newOpt">Nova opção</button>
@@ -79,6 +80,7 @@
             id: "",
             type: "",
             text: "",
+            theme: "",
             options: [""],
           },
         },

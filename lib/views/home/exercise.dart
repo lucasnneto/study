@@ -6,8 +6,8 @@ import 'package:study/providers/auth.dart';
 import 'package:study/providers/language.dart';
 import 'package:study/utils/colors.dart';
 
-class LessonList extends StatelessWidget {
-  const LessonList({Key? key}) : super(key: key);
+class ExerciseList extends StatelessWidget {
+  const ExerciseList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +15,13 @@ class LessonList extends StatelessWidget {
     Auth auth = Provider.of<Auth>(context, listen: false);
     final mediaQuery = MediaQuery.of(context);
     double getPercent() {
-      if (lang.item!.lesson.length == 0) return 0;
-      if (auth.Lessons.length == 0) return 0;
-      return (auth.Lessons.length / lang.item!.lesson.length);
+      if (lang.item!.exercise.length == 0) return 0;
+      if (auth.Exercise.length == 0) return 0;
+      return (auth.Exercise.length / lang.item!.exercise.length);
     }
 
-    final data = lang.item!.lesson.map((e) {
-      final state = auth.Lessons.firstWhere((element) => element.id == e.id,
+    final data = lang.item!.exercise.map((e) {
+      final state = auth.Exercise.firstWhere((element) => element.id == e.id,
           orElse: () => Progress(id: "", type: "", status: ""));
       double value = 0;
       if (state.status == 'complete') {
@@ -29,12 +29,13 @@ class LessonList extends StatelessWidget {
       } else if (state.status == 'start') {
         value = 0.3;
       }
-      final les = Lesson(
+      final les = Exercise(
           id: e.id,
+          type: e.type,
+          theme: e.theme,
+          lessionId: e.lessionId,
           text: e.text,
-          title: e.title,
-          video: e.video,
-          url: e.url,
+          options: e.options,
           status: e.status);
       les.status = value;
       return les;
@@ -66,11 +67,11 @@ class LessonList extends StatelessWidget {
                     .map((e) => Column(
                           children: [
                             s_ativity(
-                              title: e.title,
+                              title: e.theme,
                               text: e.text,
                               percente: e.status!,
                               onTap: () {
-                                print(e.title);
+                                print(e.text);
                               },
                             ),
                             SizedBox(

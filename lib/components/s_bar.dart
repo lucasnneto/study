@@ -54,7 +54,7 @@ class s_bar extends StatelessWidget {
                     percentege <= 0.05 ? percentege + 0.05 : percentege,
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  '${(percentege * 100).toStringAsFixed(1)}%',
+                  '${(percentege * 100).toStringAsFixed(0)}%',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                       color: Colors_Theme.blue_Theme[700], fontSize: 12),
