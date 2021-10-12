@@ -108,7 +108,7 @@ class _LoginState extends State<Login> {
                     children: [
                       Text('Não tem conta?'),
                       TextButton(
-                          onPressed: !load
+                          onPressed: load
                               ? null
                               : () {
                                   Navigator.of(context)

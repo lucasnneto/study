@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study/providers/auth.dart';
 import 'package:study/providers/doubt.dart';
+import 'package:study/providers/language.dart';
 import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/colors.dart';
 import 'package:study/views/auth/auth_home.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => new Doubts(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => new Language(),
         ),
       ],
       child: MaterialApp(

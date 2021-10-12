@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:study/data/Store.dart';
+import 'package:study/providers/language.dart';
 import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/Http.dart';
 import 'package:study/utils/Status.dart';
@@ -11,6 +13,7 @@ class Auth with ChangeNotifier {
   String? _token;
   DateTime? _expiryDate;
   String? _userId;
+  String? _language;
   String status = "";
   Timer? _logoutTimer;
   String? _name;
@@ -28,6 +31,14 @@ class Auth with ChangeNotifier {
 
   String? get userName {
     return isAuth ? _name : null;
+  }
+
+  List? get progress {
+    return isAuth ? _progress : null;
+  }
+
+  int get lengthProgress {
+    return isAuth && _progress != null ? _progress!.length : 0;
   }
 
   bool get isAuth {
@@ -52,10 +63,14 @@ class Auth with ChangeNotifier {
         'auth': _token,
       }, data: {
         'name': payload['name'],
-        'progress': []
+        'progress': [],
+        'language': 'java' //TODO PARA ESCOLHER LINGUAGEM
       });
       _name = payload['name'];
       _progress = [];
+      _language = "java"; //TODO PARA ESCOLHER LINGUAGEM
+      await Provider.of<Language>(context, listen: false)
+          .loadLanguage(_language!);
       setState('');
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Conta criada com sucesso!')));
@@ -64,7 +79,8 @@ class Auth with ChangeNotifier {
         "userId": _userId,
         "expiryDate": _expiryDate!.toIso8601String(),
         "name": _name,
-        "progress": _progress
+        "progress": _progress,
+        "language": _language
       });
       _autoLogout();
       Navigator.of(context).pop();
@@ -85,7 +101,7 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> tryAutoLogin() async {
+  Future<void> tryAutoLogin(context) async {
     if (isAuth) return Future.value();
     final userData = await Store.getMap('userData');
     if (userData == null) return Future.value();
@@ -96,6 +112,10 @@ class Auth with ChangeNotifier {
     _userId = userData['userId'];
     _name = userData['name'];
     _progress = userData['progress'];
+    _language = userData['language'];
+    await Provider.of<Language>(context, listen: false)
+        .loadLanguage(_language!);
+
     _autoLogout();
     notifyListeners();
     return Future.value();
@@ -137,13 +157,17 @@ class Auth with ChangeNotifier {
       final resData = await dio.get('/user/$_userId.json');
       _name = resData.data['name'];
       _progress = resData.data['progress'];
+      _language = resData.data['language'];
+      await Provider.of<Language>(context, listen: false)
+          .loadLanguage(_language!);
 
       await Store.saveMap('userData', {
         "token": _token,
         "userId": _userId,
         "expiryDate": _expiryDate!.toIso8601String(),
         "name": _name,
-        "progress": _progress
+        "progress": _progress,
+        'language': _language
       });
       _autoLogout();
     } catch (e) {
