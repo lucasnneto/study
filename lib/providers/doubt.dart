@@ -15,6 +15,17 @@ class Chat {
     required this.text,
     required this.date,
   });
+  static Chat toClass(Map<String, dynamic?> item) {
+    return Chat(
+      id: item['id'],
+      userId: item['userId'],
+      userName: item['userName'],
+      text: item['text'],
+      date: DateTime.parse(
+        item['date'],
+      ),
+    );
+  }
 }
 
 class Doubt {
@@ -34,6 +45,19 @@ class Doubt {
     required this.chat,
     required this.date,
   });
+  static Doubt toClass(Map<String, dynamic?> doubtData, String doubtId) {
+    return Doubt(
+      id: doubtId,
+      userId: doubtData['userId'],
+      userName: doubtData['userName'],
+      title: doubtData['title'],
+      status: doubtData['status'],
+      date: DateTime.parse(doubtData['date']),
+      chat: (doubtData['chat'] as List<dynamic>)
+          .map((e) => Chat.toClass(e))
+          .toList(),
+    );
+  }
 }
 
 class Doubts with ChangeNotifier {
@@ -56,23 +80,7 @@ class Doubts with ChangeNotifier {
       final res = await dio.get('doubt.json');
       if (res.data != null) {
         res.data.forEach((doubtId, doubtData) {
-          loadedItems.add(Doubt(
-            id: doubtId,
-            userId: doubtData['userId'],
-            userName: doubtData['userName'],
-            title: doubtData['title'],
-            status: doubtData['status'],
-            date: DateTime.parse(doubtData['date']),
-            chat: (doubtData['chat'] as List<dynamic>).map((item) {
-              return Chat(
-                id: item['id'],
-                userId: item['userId'],
-                userName: item['userName'],
-                text: item['text'],
-                date: DateTime.parse(item['date']),
-              );
-            }).toList(),
-          ));
+          loadedItems.add(Doubt.toClass(doubtData, doubtId));
         });
       }
       _items = loadedItems.reversed.toList();
@@ -107,6 +115,7 @@ class Doubts with ChangeNotifier {
         setState('error');
       }
     }
+    notifyListeners();
     return Future.value();
   }
 
@@ -209,7 +218,6 @@ class Doubts with ChangeNotifier {
             ));
         setState('');
         notifyListeners();
-        Navigator.of(ctx).pop();
       } catch (e) {
         setState('error');
       }
