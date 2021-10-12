@@ -4,14 +4,25 @@ import 'package:study/utils/Http.dart';
 class Lesson {
   final String id;
   final String text;
+  final String title;
   final String video;
   final List<dynamic> url;
   Lesson({
     required this.id,
     required this.text,
+    required this.title,
     required this.video,
     required this.url,
   });
+
+  static Lesson toClass(Map<String, dynamic?> map) {
+    return Lesson(
+        id: map['id'],
+        text: map['text'],
+        title: map['title'],
+        video: map['video'],
+        url: map['url']);
+  }
 }
 
 class Exercise {
@@ -27,6 +38,14 @@ class Exercise {
     required this.text,
     required this.options,
   });
+  static Exercise toClass(Map<String, dynamic?> map) {
+    return Exercise(
+        id: map['id'],
+        text: map['text'],
+        type: map['type'],
+        options: map['options'],
+        lessionId: map['lessionId']);
+  }
 }
 
 class Topic {
@@ -57,17 +76,11 @@ class Language with ChangeNotifier {
       if (res.data != null) {
         List<Lesson> lesson = [];
         (res.data['lesson'] as Map<String, dynamic>).forEach((k, l) {
-          lesson.add(Lesson(
-              id: l['id'], text: l['text'], video: l['video'], url: l['url']));
+          lesson.add(Lesson.toClass(l));
         });
         List<Exercise> exercise = [];
         (res.data['exercise'] as Map<String, dynamic>).forEach((k, l) {
-          exercise.add(Exercise(
-              id: l['id'],
-              text: l['text'],
-              type: l['type'],
-              options: l['options'],
-              lessionId: l['lessionId']));
+          exercise.add(Exercise.toClass(l));
         });
         _item = Topic(lesson: lesson, exercise: exercise);
       }

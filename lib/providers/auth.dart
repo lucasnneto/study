@@ -9,6 +9,28 @@ import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/Http.dart';
 import 'package:study/utils/Status.dart';
 
+class Progress {
+  final String id;
+  final String type;
+  final String status;
+  Progress({
+    required this.id,
+    required this.type,
+    required this.status,
+  });
+  Map<String, String> toMap() {
+    return {
+      "id": this.id,
+      "type": this.type,
+      "status": this.status,
+    };
+  }
+
+  static Progress toClass(Map<String, dynamic?> map) {
+    return Progress(id: map['id']!, type: map['type']!, status: map['status']!);
+  }
+}
+
 class Auth with ChangeNotifier {
   String? _token;
   DateTime? _expiryDate;
@@ -17,7 +39,7 @@ class Auth with ChangeNotifier {
   String status = "";
   Timer? _logoutTimer;
   String? _name;
-  List? _progress;
+  List<Progress>? _progress;
   String? get token {
     if (_token != null &&
         _expiryDate != null &&
@@ -79,7 +101,7 @@ class Auth with ChangeNotifier {
         "userId": _userId,
         "expiryDate": _expiryDate!.toIso8601String(),
         "name": _name,
-        "progress": _progress,
+        "progress": _progress!.map((e) => e.toMap()).toList(),
         "language": _language
       });
       _autoLogout();
@@ -111,7 +133,9 @@ class Auth with ChangeNotifier {
     _expiryDate = expiryDate;
     _userId = userData['userId'];
     _name = userData['name'];
-    _progress = userData['progress'];
+    _progress = (userData['progress'] as List<dynamic>)
+        .map((el) => Progress.toClass(el))
+        .toList();
     _language = userData['language'];
     await Provider.of<Language>(context, listen: false)
         .loadLanguage(_language!);
@@ -156,7 +180,11 @@ class Auth with ChangeNotifier {
       _userId = res.data['localId'];
       final resData = await dio.get('/user/$_userId.json');
       _name = resData.data['name'];
-      _progress = resData.data['progress'];
+      _progress = resData.data['progress'] != null
+          ? (resData.data['progress'] as List<dynamic>)
+              .map((e) => Progress.toClass(e))
+              .toList()
+          : [];
       _language = resData.data['language'];
       await Provider.of<Language>(context, listen: false)
           .loadLanguage(_language!);
@@ -166,11 +194,12 @@ class Auth with ChangeNotifier {
         "userId": _userId,
         "expiryDate": _expiryDate!.toIso8601String(),
         "name": _name,
-        "progress": _progress,
+        "progress": _progress!.map((e) => e.toMap()).toList(),
         'language': _language
       });
       _autoLogout();
     } catch (e) {
+      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Ocorreu um erro ao entrar na conta!')));
       setState('error');

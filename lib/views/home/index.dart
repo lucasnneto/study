@@ -22,18 +22,18 @@ class Home extends StatelessWidget {
 
       String getNextTopic() {
         if (lang.item == null) return "-";
-        if (auth.progress == null) return lang.item!.lesson[0].text;
+        if (auth.progress == null) return lang.item!.lesson[0].title;
         final onlyLesson = auth.progress!
             .where((element) => element.type == 'lesson')
             .toList()
             .map((e) => e.id)
             .toList();
-        if (onlyLesson.length == 0) return lang.item!.lesson[0].text;
+        if (onlyLesson.length == 0) return lang.item!.lesson[0].title;
         final lessonRemaining = lang.item!.lesson
             .where((element) => !onlyLesson.contains(element.id))
             .toList();
         if (lessonRemaining == 0) return 'Fim do estudo!';
-        return lessonRemaining[0].text;
+        return lessonRemaining[0].title;
       }
 
       return Column(
