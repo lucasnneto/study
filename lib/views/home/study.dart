@@ -20,9 +20,7 @@ class Study extends StatelessWidget {
     String url = YoutubePlayerController.convertUrlToId(lesson.video) ?? "";
     late YoutubePlayerController _controller = YoutubePlayerController(
       initialVideoId: url,
-      params: YoutubePlayerParams(
-        autoPlay: false,
-      ),
+      params: const YoutubePlayerParams(autoPlay: false, color: "blue"),
     );
     void _launchURL(String url) async => await canLaunch(url)
         ? await launch(url)
