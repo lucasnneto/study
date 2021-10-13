@@ -4,16 +4,35 @@ import 'package:study/components/s_ativity.dart';
 import 'package:study/components/s_bar.dart';
 import 'package:study/providers/auth.dart';
 import 'package:study/providers/language.dart';
+import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/colors.dart';
+import 'package:study/widget/tab_navigator.dart';
 
-class LessonList extends StatelessWidget {
+class LessonList extends StatefulWidget {
   const LessonList({Key? key}) : super(key: key);
 
   @override
+  State<LessonList> createState() => _LessonListState();
+}
+
+class _LessonListState extends State<LessonList> {
+  @override
   Widget build(BuildContext context) {
-    Language lang = Provider.of<Language>(context, listen: false);
     Auth auth = Provider.of<Auth>(context, listen: false);
+    Language lang = Provider.of<Language>(context, listen: false);
     final mediaQuery = MediaQuery.of(context);
+
+    final Map<double, String> StatusGeral = {
+      0: "",
+      0.3: "start",
+      1: "complete"
+    };
+    final Map<String, double> invertStatus = {
+      "": 0,
+      "start": 0.3,
+      "complete": 1
+    };
+
     double getPercent() {
       if (lang.item!.lesson.length == 0) return 0;
       if (auth.Lessons.length == 0) return 0;
@@ -23,12 +42,7 @@ class LessonList extends StatelessWidget {
     final data = lang.item!.lesson.map((e) {
       final state = auth.Lessons.firstWhere((element) => element.id == e.id,
           orElse: () => Progress(id: "", type: "", status: ""));
-      double value = 0;
-      if (state.status == 'complete') {
-        value = 1;
-      } else if (state.status == 'start') {
-        value = 0.3;
-      }
+      double value = invertStatus[state.status]!;
       final les = Lesson(
           id: e.id,
           text: e.text,
@@ -58,7 +72,7 @@ class LessonList extends StatelessWidget {
             )),
         SizedBox(height: 20),
         Container(
-          height: mediaQuery.size.height - 300,
+          height: mediaQuery.size.height - 330,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -70,7 +84,23 @@ class LessonList extends StatelessWidget {
                               text: e.text,
                               percente: e.status!,
                               onTap: () {
-                                print(e.title);
+                                if (StatusGeral[e.status] == '') {
+                                  final value = e.status == 0 ? 0.3 : e.status;
+                                  e.status = value;
+                                  auth.changeStatus({
+                                    "id": e.id,
+                                    "type": "lesson",
+                                    "status": value == 0
+                                        ? "start"
+                                        : StatusGeral[value]
+                                  }, context);
+                                }
+                                TabNavigator.of(context)
+                                    .push(context, Routes_Main.STUDY,
+                                        arguments: e)
+                                    .then((value) {
+                                  setState(() {});
+                                });
                               },
                             ),
                             SizedBox(

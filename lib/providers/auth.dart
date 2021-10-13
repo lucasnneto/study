@@ -228,7 +228,7 @@ class Auth with ChangeNotifier {
   Future<void> removeStatus(String id, BuildContext context) async {
     final dio = Http.dio;
     try {
-      await dio.delete('/user/$id/status.json');
+      await dio.delete('/user/$id/progress.json');
       _progress = [];
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Deletado com sucesso!')));
@@ -236,6 +236,30 @@ class Auth with ChangeNotifier {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Ocorreu um erro ao apagar os dados!')));
     }
+    notifyListeners();
+    return Future.value();
+  }
+
+  Future<void> changeStatus(
+      Map<String, dynamic> payload, BuildContext context) async {
+    final index = _progress!.indexWhere((el) => el.id == payload['id']);
+    if (index == -1) {
+      _progress!.add(Progress(
+          id: payload['id'], type: payload['type'], status: payload['status']));
+    } else {
+      _progress![index] = Progress(
+          id: payload['id'], type: payload['type'], status: payload['status']);
+    }
+    final dio = Http.dio;
+    try {
+      await dio.put('/user/$_userId/progress.json',
+          data: _progress!.map((e) => e.toMap()).toList());
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ocorreu um erro ao apagar os dados!')));
+    }
+
     return Future.value();
   }
 }

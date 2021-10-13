@@ -7,14 +7,16 @@ class TabNavigator extends StatelessWidget {
   final Map<String, WidgetBuilder> routeBuilders;
   final String? initial;
 
-  void push(BuildContext context, String router, {Object? arguments}) {
-    Navigator.push(
+  Future<void> push(BuildContext context, String router,
+      {Object? arguments}) async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => routeBuilders[router]!(context),
         settings: RouteSettings(arguments: arguments),
       ),
     );
+    return Future.value();
   }
 
   void pop(BuildContext context) {

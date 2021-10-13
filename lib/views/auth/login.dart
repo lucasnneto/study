@@ -20,12 +20,13 @@ class _LoginState extends State<Login> {
   final nodePass = FocusNode();
   final _form = GlobalKey<FormState>();
   login() async {
+    var isValid = _form.currentState!.validate();
+    if (!isValid) return;
     setState(() {
       load = true;
     });
     Auth auth = Provider.of<Auth>(context, listen: false);
-    var isValid = _form.currentState!.validate();
-    if (!isValid) return;
+
     final payload = {
       'email': email.text,
       'senha': senha.text,

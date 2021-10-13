@@ -59,7 +59,7 @@ class ExerciseList extends StatelessWidget {
             )),
         SizedBox(height: 20),
         Container(
-          height: mediaQuery.size.height - 300,
+          height: mediaQuery.size.height - 330,
           child: SingleChildScrollView(
             child: Column(
               children: [

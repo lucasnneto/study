@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study/components/s_bar.dart';
@@ -8,14 +10,19 @@ import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/colors.dart';
 import 'package:study/widget/tab_navigator.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       Language lang = Provider.of<Language>(context, listen: false);
-      Auth auth = Provider.of<Auth>(context, listen: false);
+      Auth auth = Provider.of<Auth>(context);
       double getPercent() {
         if (lang.qtdtasks == 0) return 0;
         if (auth.lengthProgress == 0) return 0;
@@ -34,7 +41,7 @@ class Home extends StatelessWidget {
         final lessonRemaining = lang.item!.lesson
             .where((element) => !onlyLesson.contains(element.id))
             .toList();
-        if (lessonRemaining == 0) return 'Fim do estudo!';
+        if (lessonRemaining.length == 0) return 'Fim do estudo!';
         return lessonRemaining[0].title;
       }
 
@@ -71,7 +78,7 @@ class Home extends StatelessWidget {
                 Text(getNextTopic(),
                     style: TextStyle(
                       color: Colors_Theme.blue_Theme[700],
-                      fontSize: 27,
+                      fontSize: 25,
                     )),
                 Divider(color: Colors_Theme.blue_Theme[700]),
                 Text("Próximo tópico")
@@ -84,10 +91,14 @@ class Home extends StatelessWidget {
           ),
           s_button(
               function: () {
-                TabNavigator.of(context).push(
+                TabNavigator.of(context)
+                    .push(
                   context,
                   Routes_Main.BODY,
-                );
+                )
+                    .then((value) {
+                  setState(() {});
+                });
               },
               label: "Volte a estudar")
         ],
