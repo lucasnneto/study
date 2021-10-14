@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
@@ -75,55 +73,58 @@ class Complete extends StatelessWidget {
       }
 
       return LayoutBuilder(builder: (context, constraints) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FloatingActionButton(
-                      mini: true,
-                      elevation: 1,
-                      // backgroundColor: Colors.transparent,
-                      shape: CircleBorder(),
-                      onPressed: () {
-                        TabNavigator.of(context).pop(context);
-                      },
-                      child: Icon(Icons.chevron_left),
-                    ),
-                    Text(
-                      exercise.theme,
-                      style: TextStyle(
-                        color: Colors_Theme.blue_Theme[700],
-                        fontSize: 27,
+        final keyb = MediaQuery.of(context).viewInsets.bottom;
+        return Container(
+          height: constraints.maxHeight - keyb,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FloatingActionButton(
+                        mini: true,
+                        elevation: 1,
+                        // backgroundColor: Colors.transparent,
+                        shape: CircleBorder(),
+                        onPressed: () {
+                          TabNavigator.of(context).pop(context);
+                        },
+                        child: Icon(Icons.chevron_left),
                       ),
-                    ),
-                    SizedBox()
-                  ],
-                ),
-                SizedBox(height: 25),
-                Html(data: exercise.text),
-                SizedBox(height: 100),
-                Container(
-                    width: constraints.maxWidth * 0.7,
-                    child: s_textfield(
-                      label: "",
-                      editingController: value,
-                      readOnly: load,
-                    ))
-              ],
-            ),
-            load
-                ? Container(
-                    width: 40,
-                    height: 40,
-                    padding: const EdgeInsets.all(2.0),
-                    child: const CircularProgressIndicator(),
-                  )
-                : s_button(function: validValue, label: "Verificar"),
-          ],
+                      Text(
+                        exercise.theme,
+                        style: TextStyle(
+                          color: Colors_Theme.blue_Theme[700],
+                          fontSize: 27,
+                        ),
+                      ),
+                      SizedBox()
+                    ],
+                  ),
+                  SizedBox(height: 25),
+                  Html(data: exercise.text),
+                ],
+              ),
+              Container(
+                  width: constraints.maxWidth * 0.85,
+                  child: s_textfield(
+                    label: "",
+                    editingController: value,
+                    readOnly: load,
+                  )),
+              load
+                  ? Container(
+                      width: 40,
+                      height: 40,
+                      padding: const EdgeInsets.all(2.0),
+                      child: const CircularProgressIndicator(),
+                    )
+                  : s_button(function: validValue, label: "Verificar"),
+            ],
+          ),
         );
       });
     });

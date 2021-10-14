@@ -81,7 +81,7 @@ class _TemplateState extends State<Template> {
         return isFirstRouteInCurrentTab;
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(

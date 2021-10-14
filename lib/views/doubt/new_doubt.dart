@@ -80,7 +80,7 @@ class _newDoubtState extends State<newDoubt> {
                 s_textfield(
                   label: "Descrição do problema",
                   editingController: describe,
-                  maxLines: 10,
+                  maxLines: 5,
                   rules: [Rules.required],
                   type: "multi",
                 ),

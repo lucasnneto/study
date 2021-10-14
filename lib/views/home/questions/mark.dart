@@ -114,13 +114,13 @@ class Mark extends StatelessWidget {
                     SizedBox()
                   ],
                 ),
-                SizedBox(height: 25),
+                SizedBox(height: 10),
                 Html(data: exercise.text),
                 SizedBox(height: 15),
                 ...questions
                     .mapIndexed(
                       (index, e) => Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
+                        padding: const EdgeInsets.only(bottom: 10),
                         child: GestureDetector(
                           onTap: load
                               ? null
@@ -133,7 +133,7 @@ class Mark extends StatelessWidget {
                           child: Container(
                               width: constraints.maxWidth,
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 20),
+                                  horizontal: 15, vertical: 15),
                               decoration: BoxDecoration(
                                 color:
                                     selectedValue == index ? cor : Colors.white,
@@ -150,15 +150,15 @@ class Mark extends StatelessWidget {
                                         color: selectedValue == index
                                             ? Colors.white
                                             : Colors_Theme.blue_Theme[700],
-                                        fontSize: 25,
+                                        fontSize: 20,
                                       )),
-                                  SizedBox(width: 15),
+                                  SizedBox(width: 10),
                                   Text(e,
                                       style: TextStyle(
                                         color: selectedValue == index
                                             ? Colors.white
                                             : Colors_Theme.blue_Theme[700],
-                                        fontSize: 25,
+                                        fontSize: 20,
                                       )),
                                 ],
                               )),
