@@ -204,7 +204,6 @@ class Auth with ChangeNotifier {
       _language = resData.data['language'];
       await Provider.of<Language>(context, listen: false)
           .loadLanguage(_language!);
-
       await Store.saveMap('userData', {
         "token": _token,
         "userId": _userId,
@@ -230,6 +229,14 @@ class Auth with ChangeNotifier {
     try {
       await dio.delete('/user/$id/progress.json');
       _progress = [];
+      await Store.saveMap('userData', {
+        "token": _token,
+        "userId": _userId,
+        "expiryDate": _expiryDate!.toIso8601String(),
+        "name": _name,
+        "progress": [],
+        'language': _language
+      });
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Deletado com sucesso!')));
     } catch (e) {
@@ -254,6 +261,14 @@ class Auth with ChangeNotifier {
     try {
       await dio.put('/user/$_userId/progress.json',
           data: _progress!.map((e) => e.toMap()).toList());
+      await Store.saveMap('userData', {
+        "token": _token,
+        "userId": _userId,
+        "expiryDate": _expiryDate!.toIso8601String(),
+        "name": _name,
+        "progress": _progress!.map((e) => e.toMap()).toList(),
+        'language': _language
+      });
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(

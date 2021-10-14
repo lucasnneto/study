@@ -8,9 +8,14 @@ import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/colors.dart';
 import 'package:study/widget/tab_navigator.dart';
 
-class ExerciseList extends StatelessWidget {
+class ExerciseList extends StatefulWidget {
   const ExerciseList({Key? key}) : super(key: key);
 
+  @override
+  State<ExerciseList> createState() => _ExerciseListState();
+}
+
+class _ExerciseListState extends State<ExerciseList> {
   @override
   Widget build(BuildContext context) {
     Language lang = Provider.of<Language>(context, listen: false);
@@ -75,9 +80,13 @@ class ExerciseList extends StatelessWidget {
                                   : 'Completar',
                               percente: e.status!,
                               onTap: () {
-                                TabNavigator.of(context).push(
-                                    context, Routes_Main.QUESTION,
-                                    arguments: e);
+                                TabNavigator.of(context)
+                                    .push(context, Routes_Main.QUESTION,
+                                        arguments: e)
+                                    .then((value) {
+                                  setState(() {});
+                                });
+                                ;
                               },
                             ),
                             SizedBox(

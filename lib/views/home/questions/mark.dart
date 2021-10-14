@@ -30,6 +30,23 @@ class Mark extends StatelessWidget {
     Color cor = Colors_Theme.blue_Theme;
 
     return StatefulBuilder(builder: (ctx, setState) {
+      nextQuestion() async {
+        final payload = {
+          "id": exercise.id,
+          "status": "complete",
+          "type": "exercise"
+        };
+        setState(() {
+          load = true;
+        });
+        await auth.changeStatus(payload, context);
+        Provider.of<Language>(context, listen: false)
+            .changeExercise(payload['id']!, context);
+        setState(() {
+          load = false;
+        });
+      }
+
       validValue() {
         final select = questions[selectedValue];
         final rightValue = exercise.options
@@ -50,6 +67,7 @@ class Mark extends StatelessWidget {
                 child: isAnswer
                     ? modal_sucess(mainFunction: () {
                         Navigator.of(c).pop();
+                        nextQuestion();
                       })
                     : modal_fail(mainFunction: () {
                         Navigator.of(c).pop();
@@ -104,12 +122,14 @@ class Mark extends StatelessWidget {
                       (index, e) => Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              cor = Colors_Theme.blue_Theme;
-                              selectedValue = index;
-                            });
-                          },
+                          onTap: load
+                              ? null
+                              : () {
+                                  setState(() {
+                                    cor = Colors_Theme.blue_Theme;
+                                    selectedValue = index;
+                                  });
+                                },
                           child: Container(
                               width: constraints.maxWidth,
                               padding: EdgeInsets.symmetric(
@@ -148,9 +168,16 @@ class Mark extends StatelessWidget {
                     .toList(),
               ],
             ),
-            s_button(
-                function: selectedValue == -1 ? null : validValue,
-                label: "Verificar")
+            load
+                ? Container(
+                    width: 40,
+                    height: 40,
+                    padding: const EdgeInsets.all(2.0),
+                    child: const CircularProgressIndicator(),
+                  )
+                : s_button(
+                    function: selectedValue == -1 ? null : validValue,
+                    label: "Verificar"),
           ],
         );
       });

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/Http.dart';
+import 'package:study/widget/tab_navigator.dart';
 
 class Lesson {
   final String id;
@@ -95,5 +97,14 @@ class Language with ChangeNotifier {
       print(e);
     }
     return Future.value();
+  }
+
+  void changeExercise(String id, BuildContext ctx) {
+    final index = _item!.exercise.indexWhere((element) => element.id == id);
+    TabNavigator.of(ctx).pop(ctx);
+    if ((index + 1) < _item!.exercise.length) {
+      TabNavigator.of(ctx).push(ctx, Routes_Main.QUESTION,
+          arguments: _item!.exercise[index + 1]);
+    }
   }
 }
