@@ -15,6 +15,7 @@ class Routes_Main {
   static const HOME = '/';
   static const BODY = '/body';
   static const STUDY = '/study';
+  static const QUESTION = '/question';
 }
 
 class Routes_User {

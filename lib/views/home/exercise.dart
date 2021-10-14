@@ -4,7 +4,9 @@ import 'package:study/components/s_ativity.dart';
 import 'package:study/components/s_bar.dart';
 import 'package:study/providers/auth.dart';
 import 'package:study/providers/language.dart';
+import 'package:study/utils/App_routes.dart';
 import 'package:study/utils/colors.dart';
+import 'package:study/widget/tab_navigator.dart';
 
 class ExerciseList extends StatelessWidget {
   const ExerciseList({Key? key}) : super(key: key);
@@ -68,10 +70,14 @@ class ExerciseList extends StatelessWidget {
                           children: [
                             s_ativity(
                               title: e.theme,
-                              text: e.text,
+                              text: e.type == 'mark'
+                                  ? 'Alternativas'
+                                  : 'Completar',
                               percente: e.status!,
                               onTap: () {
-                                print(e.text);
+                                TabNavigator.of(context).push(
+                                    context, Routes_Main.QUESTION,
+                                    arguments: e);
                               },
                             ),
                             SizedBox(
