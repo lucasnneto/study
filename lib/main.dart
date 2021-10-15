@@ -47,8 +47,6 @@ class MyApp extends StatelessWidget {
         routes: {
           AppRoutes.AUTH_HOME: (ctx) => AuthOrHomeScreen(),
           AppRoutes.REGISTRE: (ctx) => Registre(),
-          AppRoutes.HOME: (ctx) => Template(),
-          AppRoutes.NEW_DOUBT: (ctx) => newDoubt(),
         },
       ),
     );

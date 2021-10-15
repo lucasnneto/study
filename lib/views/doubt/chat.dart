@@ -39,6 +39,7 @@ class _ChatState extends State<ChatScreen> {
 
   bool load = false;
   bool load2 = false;
+  final usersColors = {};
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) => _scrollToEnd());
@@ -46,10 +47,17 @@ class _ChatState extends State<ChatScreen> {
     final index = ModalRoute.of(context)!.settings.arguments as int;
     final doubts = Provider.of<Doubts>(context);
     final doubt = doubts.items[index];
-    final usersColors = {};
+    List<String> users = [];
     doubt.chat.forEach((e) {
-      usersColors[e.userId] = cores[rand.nextInt(cores.length)];
+      if (!users.contains(e.userId)) users.add(e.userId);
     });
+
+    if (usersColors.isEmpty || usersColors.length != users.length) {
+      users.forEach((e) {
+        usersColors[e] = cores[rand.nextInt(cores.length)];
+      });
+    }
+
     final userId = Provider.of<Auth>(context, listen: false).userId;
     final userName = Provider.of<Auth>(context, listen: false).userName;
     final mediaQuery = MediaQuery.of(context);
@@ -272,7 +280,7 @@ class _ChatState extends State<ChatScreen> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 10, bottom: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,

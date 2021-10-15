@@ -90,7 +90,6 @@ class _TemplateState extends State<Template> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              vertical: 12,
               horizontal: 8,
             ),
             child: _screens[_selectedScreenIndex],
