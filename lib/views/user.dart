@@ -18,6 +18,8 @@ class _UserState extends State<User> {
   Widget build(BuildContext context) {
     Auth auth = Provider.of<Auth>(context);
     TextEditingController name = TextEditingController(text: auth.userName);
+    TextEditingController lang =
+        TextEditingController(text: auth.language!.toUpperCase());
     modalDelete() {
       showDialog(
           context: context,
@@ -109,10 +111,18 @@ class _UserState extends State<User> {
           size: 70,
         ),
         Container(
-          width: 260,
+          width: 270,
           child: s_textfield(
             label: "Nome",
             editingController: name,
+            readOnly: true,
+          ),
+        ),
+        Container(
+          width: 270,
+          child: s_textfield(
+            label: "Linguagem",
+            editingController: lang,
             readOnly: true,
           ),
         ),
