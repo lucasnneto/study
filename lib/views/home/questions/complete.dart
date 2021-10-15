@@ -51,6 +51,8 @@ class Complete extends StatelessWidget {
             barrierDismissible: false,
             context: ctx,
             builder: (c) {
+              Auth auth = Provider.of<Auth>(c);
+              if (!auth.isAuth) Navigator.of(c).pop();
               return Dialog(
                 child: isAnswer
                     ? modal_sucess(mainFunction: () {

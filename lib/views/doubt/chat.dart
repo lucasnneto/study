@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study/providers/auth.dart';
@@ -7,15 +9,22 @@ import 'package:study/views/body.dart';
 import 'package:study/components/s_textfield.dart';
 import 'package:study/widget/tab_navigator.dart';
 
-class Chat extends StatefulWidget {
-  Chat({Key? key}) : super(key: key);
+class ChatScreen extends StatefulWidget {
+  ChatScreen({Key? key}) : super(key: key);
 
   @override
-  State<Chat> createState() => _ChatState();
+  State<ChatScreen> createState() => _ChatState();
 }
 
-class _ChatState extends State<Chat> {
+class _ChatState extends State<ChatScreen> {
   ScrollController _scrollController = ScrollController();
+  List<Color> cores = [
+    Colors.orange,
+    Colors.pink,
+    Colors.black,
+    Colors.lime,
+    Colors.purple,
+  ];
 
   TextEditingController msg = TextEditingController();
 
@@ -33,10 +42,14 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) => _scrollToEnd());
-
+    Random rand = new Random();
     final index = ModalRoute.of(context)!.settings.arguments as int;
     final doubts = Provider.of<Doubts>(context);
     final doubt = doubts.items[index];
+    final usersColors = {};
+    doubt.chat.forEach((e) {
+      usersColors[e.userId] = cores[rand.nextInt(cores.length)];
+    });
     final userId = Provider.of<Auth>(context, listen: false).userId;
     final userName = Provider.of<Auth>(context, listen: false).userName;
     final mediaQuery = MediaQuery.of(context);
@@ -57,6 +70,8 @@ class _ChatState extends State<Chat> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
+          Auth auth = Provider.of<Auth>(context);
+          if (!auth.isAuth) Navigator.of(context).pop();
           // retorna um objeto do tipo Dialog
           final status = doubt.status;
           final value = status == 'open' ? 'finalizado' : 'aberto';
@@ -230,7 +245,11 @@ class _ChatState extends State<Chat> {
                                         e.userId != userId
                                             ? Text(
                                                 e.userName,
-                                                style: TextStyle(fontSize: 10),
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        usersColors[e.userId]),
                                               )
                                             : SizedBox(),
                                         SizedBox(

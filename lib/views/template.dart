@@ -38,7 +38,7 @@ class _TemplateState extends State<Template> {
       routeBuilders: {
         Routes_Doubt.HOME: (context) => Doubt(),
         Routes_Doubt.NEW: (context) => newDoubt(),
-        Routes_Doubt.DETAIL: (context) => Chat(),
+        Routes_Doubt.DETAIL: (context) => ChatScreen(),
       },
       initial: Routes_Doubt.HOME,
     ),
@@ -66,6 +66,11 @@ class _TemplateState extends State<Template> {
 
   @override
   Widget build(BuildContext context) {
+    dispose() {
+      super.dispose();
+      Navigator.of(context).pop();
+    }
+
     return WillPopScope(
       onWillPop: () async {
         final isFirstRouteInCurrentTab = !await _screens[_selectedScreenIndex]
