@@ -36,7 +36,11 @@ class _LessonListState extends State<LessonList> with WidgetsBindingObserver {
     double getPercent() {
       if (lang.item!.lesson.length == 0) return 0;
       if (auth.Lessons.length == 0) return 0;
-      return (auth.Lessons.length / lang.item!.lesson.length);
+      final prog = auth.Lessons.fold<num>(
+          0,
+          (previousValue, element) =>
+              invertStatus[element.status]! + previousValue);
+      return (prog / lang.item!.lesson.length);
     }
 
     final data = lang.item!.lesson.map((e) {

@@ -21,17 +21,23 @@ class _HomeState extends State<Home> {
     return LayoutBuilder(builder: (context, constraints) {
       Language lang = Provider.of<Language>(context, listen: false);
       Auth auth = Provider.of<Auth>(context);
+      final convert = {"": 0, 'start': 0.3, 'complete': 1};
       double getPercent() {
         if (lang.qtdtasks == 0) return 0;
         if (auth.lengthProgress == 0) return 0;
-        return (auth.lengthProgress / lang.qtdtasks);
+        final prog = auth.progress!.fold<num>(
+            0,
+            (previousValue, element) =>
+                convert[element.status]! + previousValue);
+        return (prog / lang.qtdtasks);
       }
 
       String getNextTopic() {
         if (lang.item == null) return "-";
         if (auth.progress == null) return lang.item!.lesson[0].title;
         final onlyLesson = auth.progress!
-            .where((element) => element.type == 'lesson')
+            .where((element) =>
+                element.type == 'lesson' && element.status == 'complete')
             .toList()
             .map((e) => e.id)
             .toList();

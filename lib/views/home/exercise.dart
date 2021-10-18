@@ -16,15 +16,25 @@ class ExerciseList extends StatefulWidget {
 }
 
 class _ExerciseListState extends State<ExerciseList> {
+  final Map<double, String> StatusGeral = {0: "", 0.3: "start", 1: "complete"};
   @override
   Widget build(BuildContext context) {
     Language lang = Provider.of<Language>(context);
     Auth auth = Provider.of<Auth>(context, listen: false);
     final mediaQuery = MediaQuery.of(context);
+    final Map<String, double> invertStatus = {
+      "": 0,
+      "start": 0.3,
+      "complete": 1
+    };
     double getPercent() {
       if (lang.item!.exercise.length == 0) return 0;
       if (auth.Exercise.length == 0) return 0;
-      return (auth.Exercise.length / lang.item!.exercise.length);
+      final prog = auth.Exercise.fold<num>(
+          0,
+          (previousValue, element) =>
+              invertStatus[element.status]! + previousValue);
+      return (prog / lang.item!.exercise.length);
     }
 
     final data = lang.item!.exercise.map((e) {
@@ -80,6 +90,17 @@ class _ExerciseListState extends State<ExerciseList> {
                                   : 'Completar',
                               percente: e.status!,
                               onTap: () {
+                                if (StatusGeral[e.status] == '') {
+                                  final value = e.status == 0 ? 0.3 : e.status;
+                                  e.status = value;
+                                  auth.changeStatus({
+                                    "id": e.id,
+                                    "type": "exercise",
+                                    "status": value == 0
+                                        ? "start"
+                                        : StatusGeral[value]
+                                  }, context);
+                                }
                                 TabNavigator.of(context)
                                     .push(context, Routes_Main.QUESTION,
                                         arguments: e)

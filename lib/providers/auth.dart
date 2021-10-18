@@ -59,7 +59,7 @@ class Auth with ChangeNotifier {
     return isAuth ? _language : null;
   }
 
-  List? get progress {
+  List<Progress>? get progress {
     return isAuth ? _progress : null;
   }
 
