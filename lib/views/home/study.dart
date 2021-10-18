@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:study/components/s_button.dart';
 import 'package:study/providers/auth.dart';
 import 'package:study/providers/language.dart';
 import 'package:study/utils/colors.dart';
 import 'package:study/widget/tab_navigator.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Study extends StatelessWidget {
@@ -15,13 +15,6 @@ class Study extends StatelessWidget {
   Widget build(BuildContext context) {
     Auth auth = Provider.of<Auth>(context, listen: false);
     final lesson = ModalRoute.of(context)!.settings.arguments as Lesson;
-    final splitText = lesson.text.split('\n');
-    final initial = splitText.removeAt(0);
-    String url = YoutubePlayerController.convertUrlToId(lesson.video) ?? "";
-    late YoutubePlayerController _controller = YoutubePlayerController(
-      initialVideoId: url,
-      params: const YoutubePlayerParams(autoPlay: false, color: "blue"),
-    );
     void _launchURL(String url) async => await canLaunch(url)
         ? await launch(url)
         : throw 'Could not launch $url';
@@ -67,20 +60,7 @@ class Study extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
-            Text(initial),
-            SizedBox(height: 30),
-            url != ''
-                ? Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 500,
-                    ),
-                    child: YoutubePlayerIFrame(
-                      controller: _controller,
-                    ),
-                  )
-                : SizedBox(),
-            SizedBox(height: 30),
-            Text(splitText.join('\n\n')),
+            Html(data: lesson.text),
             SizedBox(height: 25),
             Text(
               "Não pare ai!",
@@ -92,19 +72,14 @@ class Study extends StatelessWidget {
             ),
             SizedBox(height: 25),
             ...lesson.url.map(
-              (e) => Column(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      _launchURL(e.toString());
-                    },
-                    child: Text(e.toString()),
-                    style: TextButton.styleFrom(
-                      primary: Colors_Theme.blue_Theme[700],
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                ],
+              (e) => TextButton(
+                onPressed: () {
+                  _launchURL(e.toString());
+                },
+                child: FittedBox(child: Text(e.toString())),
+                style: TextButton.styleFrom(
+                  primary: Colors_Theme.blue_Theme[700],
+                ),
               ),
             ),
             load

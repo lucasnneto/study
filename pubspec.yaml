@@ -37,7 +37,6 @@ dependencies:
   dio: ^4.0.0
   shared_preferences: ^2.0.8
   uuid: ^3.0.5
-  youtube_player_iframe: ^2.2.2
   url_launcher: ^6.0.12
   flutter_html: ^2.1.5
 

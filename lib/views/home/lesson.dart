@@ -15,11 +15,11 @@ class LessonList extends StatefulWidget {
   State<LessonList> createState() => _LessonListState();
 }
 
-class _LessonListState extends State<LessonList> {
+class _LessonListState extends State<LessonList> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     Auth auth = Provider.of<Auth>(context, listen: false);
-    Language lang = Provider.of<Language>(context, listen: false);
+    Language lang = Provider.of<Language>(context);
     final mediaQuery = MediaQuery.of(context);
 
     final Map<double, String> StatusGeral = {

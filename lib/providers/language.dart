@@ -103,8 +103,12 @@ class Language with ChangeNotifier {
     final index = _item!.exercise.indexWhere((element) => element.id == id);
     TabNavigator.of(ctx).pop(ctx);
     if ((index + 1) < _item!.exercise.length) {
-      TabNavigator.of(ctx).push(ctx, Routes_Main.QUESTION,
-          arguments: _item!.exercise[index + 1]);
+      TabNavigator.of(ctx)
+          .push(ctx, Routes_Main.QUESTION,
+              arguments: _item!.exercise[index + 1])
+          .then((value) {
+        notifyListeners();
+      });
     }
   }
 }

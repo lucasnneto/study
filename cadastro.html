@@ -29,8 +29,6 @@
           placeholder="Texto do topico"
         ></textarea>
         <br />
-        <input type="text" v-model="lesson.video" placeholder="URL de video" />
-        <br />
         <button @click="newURL">Nova URL</button>
         <div v-for="(u,index) in lesson.url" :key="index">
           <input
@@ -46,12 +44,19 @@
 
       <br />
       <select v-model="exercise.type">
-        <option disabled value="">Tipo de exrcicio</option>
+        <option disabled value="">Tipo de exercicio</option>
         <option value="mark">Marcar</option>
         <option value="complete">Completar</option>
       </select>
-      <input type="text" v-model="exercise.theme" placeholder="Titulo" />
-      <input type="text" v-model="exercise.text" placeholder="Pergunta" />
+      <br />
+      <input type="text" v-model="exercise.theme" placeholder="Titulo/Tema" />
+      <br />
+      <textarea
+        cols="30"
+        rows="10"
+        v-model="exercise.text"
+        placeholder="Pergunta"
+      ></textarea>
       <div>
         <button @click="newOpt">Nova opção</button>
         <div v-for="(u,index) in exercise.options" :key="index">
@@ -73,7 +78,6 @@
             id: "",
             title: "",
             text: "",
-            video: "",
             url: [""],
           },
           exercise: {

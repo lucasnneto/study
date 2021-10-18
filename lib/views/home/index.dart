@@ -39,7 +39,10 @@ class _HomeState extends State<Home> {
         final lessonRemaining = lang.item!.lesson
             .where((element) => !onlyLesson.contains(element.id))
             .toList();
-        if (lessonRemaining.length == 0) return 'Fim do estudo!';
+        if (lessonRemaining.length == 0) {
+          if (getPercent() < 1) return 'Atividades!';
+          return 'Fim do estudo!';
+        }
         return lessonRemaining[0].title;
       }
 
@@ -54,7 +57,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           Container(
-            height: 100,
+            height: 75,
             width: constraints.maxWidth,
             child: s_bar(
               label: "Nível do estudo",
@@ -98,7 +101,8 @@ class _HomeState extends State<Home> {
                   setState(() {});
                 });
               },
-              label: "Volte a estudar")
+              label: "Volte a estudar"),
+          SizedBox(height: 2)
         ],
       );
     });

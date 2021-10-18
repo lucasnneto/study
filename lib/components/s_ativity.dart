@@ -18,7 +18,7 @@ class s_ativity extends StatelessWidget {
   Widget build(BuildContext context) {
     String filterText(String text) {
       if (text == null) return "";
-      final value = text.length >= 49 ? (text.substring(0, 50) + '...') : text;
+      final value = text.length >= 29 ? (text.substring(0, 30) + '...') : text;
       return value;
     }
 

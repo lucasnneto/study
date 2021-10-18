@@ -18,7 +18,7 @@ class ExerciseList extends StatefulWidget {
 class _ExerciseListState extends State<ExerciseList> {
   @override
   Widget build(BuildContext context) {
-    Language lang = Provider.of<Language>(context, listen: false);
+    Language lang = Provider.of<Language>(context);
     Auth auth = Provider.of<Auth>(context, listen: false);
     final mediaQuery = MediaQuery.of(context);
     double getPercent() {

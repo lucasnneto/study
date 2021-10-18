@@ -20,6 +20,7 @@ class Complete extends StatelessWidget {
     Auth auth = Provider.of<Auth>(context, listen: false);
     bool load = false;
     TextEditingController value = TextEditingController();
+    FocusScopeNode foco = FocusScopeNode();
 
     return StatefulBuilder(builder: (ctx, setState) {
       nextQuestion() async {
@@ -36,6 +37,7 @@ class Complete extends StatelessWidget {
             .changeExercise(payload['id']!, context);
         setState(() {
           load = false;
+          foco.unfocus();
         });
       }
 
@@ -114,6 +116,7 @@ class Complete extends StatelessWidget {
                   width: constraints.maxWidth * 0.85,
                   child: s_textfield(
                     label: "",
+                    focusNode: foco,
                     editingController: value,
                     readOnly: load,
                   )),
