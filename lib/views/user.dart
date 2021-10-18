@@ -26,7 +26,8 @@ class _UserState extends State<User> {
           builder: (ctx) {
             return StatefulBuilder(builder: (c, setS) {
               Auth auth = Provider.of<Auth>(c);
-              if (!auth.isAuth) Navigator.of(c).pop();
+              if (!auth.isAuth && Navigator.of(c).canPop())
+                Navigator.of(c).pop();
               return AlertDialog(
                 title: Text("Apagar dados?",
                     style: TextStyle(fontWeight: FontWeight.bold)),
@@ -76,7 +77,8 @@ class _UserState extends State<User> {
           builder: (ctx) {
             return StatefulBuilder(builder: (c, setS) {
               Auth auth = Provider.of<Auth>(c);
-              if (!auth.isAuth) Navigator.of(c).pop();
+              if (!auth.isAuth && Navigator.of(c).canPop())
+                Navigator.of(c).pop();
               return AlertDialog(
                 title: Text("Tem certeza que deseja sair?",
                     style: TextStyle(fontWeight: FontWeight.bold)),

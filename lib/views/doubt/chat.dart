@@ -79,7 +79,8 @@ class _ChatState extends State<ChatScreen> {
         context: context,
         builder: (BuildContext context) {
           Auth auth = Provider.of<Auth>(context);
-          if (!auth.isAuth) Navigator.of(context).pop();
+          if (!auth.isAuth && Navigator.of(context).canPop())
+            Navigator.of(context).pop();
           // retorna um objeto do tipo Dialog
           final status = doubt.status;
           final value = status == 'open' ? 'finalizado' : 'aberto';

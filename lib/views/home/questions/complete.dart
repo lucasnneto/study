@@ -54,7 +54,8 @@ class Complete extends StatelessWidget {
             context: ctx,
             builder: (c) {
               Auth auth = Provider.of<Auth>(c);
-              if (!auth.isAuth) Navigator.of(c).pop();
+              if (!auth.isAuth && Navigator.of(c).canPop())
+                Navigator.of(c).pop();
               return Dialog(
                 child: isAnswer
                     ? modal_sucess(mainFunction: () {
