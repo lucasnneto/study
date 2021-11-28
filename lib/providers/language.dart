@@ -7,7 +7,7 @@ class Lesson {
   final String id;
   final String text;
   final String title;
-  final String video;
+  final String? video;
   final List<dynamic> url;
   double? status;
   Lesson({
@@ -53,7 +53,7 @@ class Exercise {
         type: map['type'],
         theme: map['theme'],
         options: map['options'],
-        lessionId: map['lessionId']);
+        lessionId: map['lessonId']);
   }
 }
 
