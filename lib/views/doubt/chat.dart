@@ -218,7 +218,7 @@ class _ChatState extends State<ChatScreen> {
               SizedBox(height: 20),
               Container(
                 height: mediaQuery.size.height -
-                    300 -
+                    303 -
                     MediaQuery.of(context).viewInsets.bottom * 0.7,
                 child: SingleChildScrollView(
                   controller: _scrollController,

@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Começe a aprender",
+            "Comece a aprender",
             style: TextStyle(
               color: Colors_Theme.blue_Theme[700],
               fontSize: 27,
